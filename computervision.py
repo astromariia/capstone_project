@@ -3,8 +3,8 @@ import numpy as np
 
 cap = cv2.VideoCapture(0)
 
-lower_purple = np.array([130, 50, 50])
-upper_purple = np.array([160, 255, 255])
+lower_purple = np.array([295, 45, 100])
+upper_purple = np.array([295, 100, 25])
 
 
 while True:
