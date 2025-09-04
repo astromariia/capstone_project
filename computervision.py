@@ -1,0 +1,28 @@
+import cv2
+import numpy as np
+
+cap = cv2.VideoCapture(0)
+
+lower_purple = np.array([130, 50, 50])
+upper_purple = np.array([160, 255, 255])
+
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+    purple_mask = cv2.inRange(hsv_frame, lower_purple, upper_purple)
+
+    purple_detection = cv2.bitwise_and(frame, frame, mask=purple_mask)
+
+    cv2.imshow("Original Frame", frame)
+    cv2.imshow("Purple Detection", purple_detection)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
