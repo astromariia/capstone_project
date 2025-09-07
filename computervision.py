@@ -3,6 +3,10 @@ import numpy as np
 
 cap = cv2.VideoCapture(0)
 
+if not cap.isOpened():
+        print("Error: Could not open camera.")
+        exit()
+
 lower_purple = np.array([295, 45, 100])
 upper_purple = np.array([295, 100, 25])
 
@@ -10,6 +14,7 @@ upper_purple = np.array([295, 100, 25])
 while True:
     ret, frame = cap.read()
     if not ret:
+        print("Error: Could not read frame.")
         break
 
     hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
