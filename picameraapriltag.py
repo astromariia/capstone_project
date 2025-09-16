@@ -3,6 +3,7 @@ import cv2
 import argparse
 from pupil_apriltags import Detector
 from picamera2 import Picamera2
+import time 
 
 Line_length = 5
 Center_Color = (0, 255, 0)
@@ -27,7 +28,9 @@ def plotText(image, color, center, text):
     return cv2.putText(image, str(text), center, cv2.FONT_HERSHEY_SIMPLEX, 1, color, 3)
 
 detector = pupil_apriltags.Detector(families='tag36h11')
-cam = cv2.VideoCapture(0)
+picam2 = Picamera2()
+picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (320, 240)}))
+picam2.start()
 
 looping = True
 
@@ -48,6 +51,7 @@ for i in range(2880):
     key = cv2.waitKey(100)
     if key == 13:
          break
+    time.sleep(0.1) 
 
 picam2.stop()
 cv2.destroyAllWindows()
