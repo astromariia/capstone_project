@@ -22,7 +22,7 @@ turn_speed = 0.8
 
 picam2.start()
 
-for i in range(10000):
+for i in range(2880):
     frame = picam2.capture_array()
     hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     blurred_frame = cv2.GaussianBlur(hsv_frame, (21, 21), 0)
