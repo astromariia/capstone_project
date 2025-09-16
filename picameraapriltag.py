@@ -31,7 +31,7 @@ cam = cv2.VideoCapture(0)
 
 looping = True
 
-while looping:
+for i in range(2880):
     result, image = picam2.capture_array()
     grayimg = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     detections = detector.detect(grayimg)
@@ -47,7 +47,8 @@ while looping:
     cv2.imshow('Result', image)
     key = cv2.waitKey(100)
     if key == 13:
-         looping = False
+         break
 
+picam2.stop()
 cv2.destroyAllWindows()
 cv2.imwrite("final.png", image)
