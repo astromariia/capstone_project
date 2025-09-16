@@ -76,5 +76,5 @@ for i in range(2880):
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-picam2.start()
+picam2.stop()
 cv2.destroyAllWindows()
