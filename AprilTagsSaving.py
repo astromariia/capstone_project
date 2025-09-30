@@ -2,8 +2,8 @@ import pupil_apriltags
 import cv2
 import argparse
 from pupil_apriltags import Detector
-from picamera2 import Picamera2
-import time 
+import time
+import picamera2
 
 Line_length = 5
 Center_Color = (0, 255, 0)
@@ -35,6 +35,10 @@ picam2.start()
 start_time = time.time()
 duration = 90
 
+initial_tag_id = None
+initial_tag_center = None
+found_initial_tag = False
+
 while time.time() - start_time < duration:
     image = picam2.capture_array()
     grayimg = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -43,6 +47,12 @@ while time.time() - start_time < duration:
         print("Nothing")
     else:
         for detect in detections:
+            if not found_initial_tag:
+                if detect.tag_id < 5:
+                    initial_tag_id = detect.tag_id
+                    initial_tag_center = detect.center
+                    found_initial_tag = True
+                    print(f"Initial tag saved! ID: {initial_tag_id}, Center: {initial_tag_center}")
             print("tag_id: %s, center: %s" % (detect.tag_id, detect.center))
             image = plotPoint(image, detect.center, Center_Color)
             image = plotText(image, Center_Color, detect.center, detect.tag_id)
@@ -50,10 +60,13 @@ while time.time() - start_time < duration:
                 image = plotPoint(image, corner, Corner_Color)
     cv2.imshow('Result', image)
     key = cv2.waitKey(100)
-    if key == 13:
-         break
-    time.sleep(0.1) 
 
 picam2.stop()
 cv2.destroyAllWindows()
 cv2.imwrite("final.png", image)
+print("Ending")
+if initial_tag_id is not None:
+    print(f"The initially saved tag ID was: {initial_tag_id}")
+    print(f"The initially saved tag center was: {initial_tag_center}")
+else:
+    print("No initial tag under 5 was detected.")

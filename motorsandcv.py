@@ -3,9 +3,13 @@ import numpy as np
 from PIL import Image
 from picamera2 import Picamera2
 import gpiozero
+import time
 
 lower_purple = np.array([120, 100, 100])
 upper_purple = np.array([160, 255, 255])
+
+image_width = 320
+image_height = 240
 
 picam2 = Picamera2()
 config=picam2.configure(picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (320, 240)}, controls={"FrameRate": 32} ))
@@ -21,8 +25,10 @@ turn_speed = 0.8
 
 
 picam2.start()
+start_time = time.time()
+duration = 90
 
-for i in range(2880):
+while time.time() - start_time < duration:
     frame = picam2.capture_array()
     hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     blurred_frame = cv2.GaussianBlur(hsv_frame, (21, 21), 0)
