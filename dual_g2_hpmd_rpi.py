@@ -15,27 +15,27 @@ MAX_SPEED = _max_speed
 _pin_M1INA = 16
 _pin_M1INB = 18
 _pin_M1PWM = 12
-_pin_M1EN = 5
+#_pin_M1EN = 5
 
 _pin_M2INA = 13
 _pin_M2INB = 14
 _pin_M2PWM = 33
-_pin_M2EN = 6
+# _pin_M2EN = 6
 
 class Motor(object):
     MAX_SPEED = _max_speed
 
-    def __init__(self, ina_pin, inb_pin, pwm_pin, en_diag_pin):
+    def __init__(self, ina_pin, inb_pin, pwm_pin): #en_diag_pin
         self.ina_pin = ina_pin
         self.inb_pin = inb_pin
         self.pwm_pin = pwm_pin
-        self.en_diag_pin = en_diag_pin
+        #self.en_diag_pin = en_diag_pin
 
         _pi.set_mode(self.ina_pin, pigpio.OUTPUT)
         _pi.set_mode(self.inb_pin, pigpio.OUTPUT)
         _pi.set_mode(self.pwm_pin, pigpio.OUTPUT)
-        _pi.set_mode(self.en_diag_pin, pigpio.INPUT)
-        _pi.set_pull_up_down(self.en_diag_pin, pigpio.PUD_UP)
+        #_pi.set_mode(self.en_diag_pin, pigpio.INPUT)
+        #_pi.set_pull_up_down(self.en_diag_pin, pigpio.PUD_UP)
 
         _pi.write(self.ina_pin, 0)
         _pi.write(self.inb_pin, 0)
@@ -68,15 +68,15 @@ class Motor(object):
         _pi.write(self.inb_pin, 1)
         _pi.hardware_PWM(self.pwm_pin, 0, 0)
 
-    def getFault(self):
-        return not _pi.read(self.en_diag_pin)
+    # def getFault(self):
+    #     return not _pi.read(self.en_diag_pin)
 
 class Motors(object):
     MAX_SPEED = _max_speed
 
     def __init__(self):
-        self.motor1 = Motor(_pin_M1INA, _pin_M1INB, _pin_M1PWM, _pin_M1EN)
-        self.motor2 = Motor(_pin_M2INA, _pin_M2INB, _pin_M2PWM, _pin_M2EN)
+        self.motor1 = Motor(_pin_M1INA, _pin_M1INB, _pin_M1PWM) # _pin_M1EN
+        self.motor2 = Motor(_pin_M2INA, _pin_M2INB, _pin_M2PWM)# _pin_M2EN
 
     def setSpeeds(self, m1_speed, m2_speed):
         self.motor1.setSpeed(m1_speed)
@@ -90,8 +90,8 @@ class Motors(object):
         self.motor1.disable()
         self.motor2.disable()
 
-    def getFaults(self):
-        return self.motor1.getFault() or self.motor2.getFault()
+    # def getFaults(self):
+    #     return self.motor1.getFault() or self.motor2.getFault()
 
     def forceStop(self):
         # reinitialize the pigpio interface in case we interrupted another command
